@@ -12,6 +12,11 @@ var line = (x, y, w, z) => {
     context.lineTo(w, z);
 }
 
+var setColor = (color) => {
+    context.strokeStyle = color;
+    context.stroke();
+}
+
 var canvas = document.getElementById('my_canvas');
 var context = canvas.getContext('2d');
 
@@ -32,8 +37,7 @@ function Cell(i, j) {
     }
 
     this.show = () => {
-        context.strokeStyle = 'black';
-        context.stroke();
+        setColor('black');
 
         Object.values(this.walls).forEach(
             (value) => {
