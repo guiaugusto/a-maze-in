@@ -19,37 +19,27 @@ function Cell(i, j) {
     this.i = i;
     this.j = j;
     this.visited = false;
+    
+    let x = i * size;
+    let y = j * size;
 
     // top, bottom, left, right
     this.walls = {
-        top: true,
-        bottom: true,
-        left: true,
-        right: true
+        top: { status: true, coords: [x, y + size, x, y] },
+        bottom: { status: true, coords: [x + size, y, x + size, y + size] },
+        left: { status: true, coords: [x, y, x + size, y] },
+        right: { status: true, coords: [x + size, y + size, x, y + size] }
     }
 
     this.show = () => {
-        var x = this.i*size;
-        var y = this.j*size;
-
         context.strokeStyle = 'black';
         context.stroke();
 
-        if (this.walls.left) {
-            line(x, y, x+size, y);
-        }
-
-        if (this.walls.bottom) {
-            line(x+size, y, x+size, y+size);
-        }
-
-        if (this.walls.right) {
-            line(x+size, y+size, x, y+size);
-        }
-
-        if (this.walls.top){
-            line(x, y+size, x, y);
-        }
+        Object.values(this.walls).forEach(
+            (value) => {
+                value.status ? line(...value.coords) : null
+            }
+        )
     }
 }
 
@@ -107,14 +97,13 @@ function generate_maze(current_cell) {
 
     while (neighbors.length !== 0) {
         // get neighbors
-        console.log(neighbors);
         let [x, y, current_wall, neighbor_wall] = neighbors.random();
         remove_neighbor(neighbors, x, y);
 
-        current_cell.walls[current_wall] = false;
+        current_cell.walls[current_wall].status = false;
 
         let neighbor_cell = get_cell(x, y);
-        neighbor_cell.walls[neighbor_wall] = false;
+        neighbor_cell.walls[neighbor_wall].status = false;
 
         generate_maze(neighbor_cell);
     }
