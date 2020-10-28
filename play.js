@@ -1,10 +1,15 @@
 let width = 20;
 let height = 20;
-let w = 500/width;
+let size = 500/width;
 let grid_field = [];
 
 Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
+}
+
+var line = (x, y, w, z) => {
+    context.moveTo(x, y);
+    context.lineTo(w, z);
 }
 
 var canvas = document.getElementById('my_canvas');
@@ -24,30 +29,26 @@ function Cell(i, j) {
     }
 
     this.show = () => {
-        var x = this.i*w;
-        var y = this.j*w;
+        var x = this.i*size;
+        var y = this.j*size;
 
         context.strokeStyle = 'black';
         context.stroke();
 
         if (this.walls.left) {
-            context.moveTo(x, y);
-            context.lineTo(x+width, y);
+            line(x, y, x+size, y);
         }
 
         if (this.walls.bottom) {
-            context.moveTo(x+w, y);
-            context.lineTo(x+w, y+w);
+            line(x+size, y, x+size, y+size);
         }
 
         if (this.walls.right) {
-            context.moveTo(x+w, y+w);
-            context.lineTo(x, y+w);
+            line(x+size, y+size, x, y+size);
         }
 
         if (this.walls.top){
-            context.moveTo(x, y+w);
-            context.lineTo(x, y);
+            line(x, y+size, x, y);
         }
     }
 }
